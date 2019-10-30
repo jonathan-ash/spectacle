@@ -9,7 +9,8 @@ export default {
     secondary: '#f04d21',
     tertiary: '#1e2852',
     quaternary: '#ffc951',
-    quinary: '#8bddfd'
+    quinary: '#8bddfd',
+    ghost: 'hsla(38, 7%, 50%, 0.34)'
   },
   fonts: {
     header: '"Helvetica Neue", Helvetica, Arial, sans-serif',

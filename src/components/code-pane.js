@@ -4,6 +4,8 @@ import propTypes from 'prop-types';
 import theme from 'prism-react-renderer/themes/vsDark';
 import { ThemeContext } from 'styled-components';
 
+import { SlideContext } from '../hooks/use-slide';
+
 const spaceSearch = /\S|$/;
 
 const lineNumberStyles = {
@@ -68,6 +70,28 @@ export default function CodePane(props) {
     [props.fontSize, font]
   );
 
+  const {
+    state: { currentSlideElement }
+  } = React.useContext(SlideContext);
+  //   const linesPerView = React.useMemo(
+  //     () => themeContext.size.maxCodePaneHeight / Number(fontSize.split('px')[0]),
+  //     [fontSize, themeContext.size.maxCodePaneHeight]
+  //   );
+
+  //   console.log(linesPerView);
+
+  const lineToScrollTo = React.useMemo(() => {
+    if (!!props.wantedLines && !!props.wantedLines[currentSlideElement]) {
+      const median = props.wantedLines[currentSlideElement].length / 2;
+      const sortedArray = props.wantedLines[currentSlideElement].sort(
+        (a, b) => a - b
+      );
+      return props.wantedLines[currentSlideElement] % 2 !== 0
+        ? sortedArray[median]
+        : sortedArray[Math.floor(median)];
+    }
+  }, [props.wantedLines, currentSlideElement]);
+
   return (
     <>
       <Highlight
@@ -90,7 +114,14 @@ export default function CodePane(props) {
                 whiteSpace: 'pre-wrap',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-start'
+                justifyContent: 'flex-start',
+                opacity:
+                  !!props.wantedLines &&
+                  !!props.wantedLines[currentSlideElement]
+                    ? props.wantedLines[currentSlideElement].includes(i + 1)
+                      ? 1
+                      : 0.2
+                    : 1
               };
               if (line[0].content && !line[0].empty) {
                 line[0].content = line[0].content.trimLeft();
@@ -124,7 +155,8 @@ CodePane.propTypes = {
   children: propTypes.string.isRequired,
   fontSize: propTypes.number,
   language: propTypes.string.isRequired,
-  theme: propTypes.object
+  theme: propTypes.object,
+  wantedLines: propTypes.arrayOf(propTypes.arrayOf.number)
 };
 
 CodePane.defaultProps = {

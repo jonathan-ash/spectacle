@@ -21,7 +21,7 @@ import {
   DEFAULT_SLIDE_ELEMENT_INDEX,
   DEFAULT_SLIDE_INDEX
 } from '../../utils/constants';
-import searchChildrenForAppear from '../../utils/search-children-appear';
+import searchChildrenForAppearOrCodePaneTransitions from '../../utils/search-children-appear';
 import OverviewDeck from './overview-deck';
 import { Markdown, Slide } from '../../index';
 import indentNormalizer from '../../utils/indent-normalizer';
@@ -109,7 +109,9 @@ const Deck = ({
   const slideElementMap = React.useMemo(() => {
     const map = {};
     filteredChildren.filter((slide, index) => {
-      map[index] = searchChildrenForAppear(slide.props.children);
+      map[index] = searchChildrenForAppearOrCodePaneTransitions(
+        slide.props.children
+      );
     });
     return map;
   }, [filteredChildren]);
