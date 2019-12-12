@@ -1,4 +1,4 @@
-# Getting Started with Spectacle: A Tutorial
+# Getting Started with Spectacle
 
 In this guide, we’ll show you how to get started with Spectacle and walk you through the creation and customization of a presentation deck.
 
@@ -55,3 +55,35 @@ The triple dash `---` is used for a slide delimiter. The `Notes:` keyword is use
   `npx spectacle -s my-slides.mdx`
 
 - The web server started supports live refreshing and will update your deck as you make changes to the Markdown file.
+
+## 3. Create a deck using One Page.
+
+One Page is a single self-contained `HTML` file that lets you build a deck using no build steps. It has references to all the dependencies you need to author the deck and launch it in a web browser. Since there is no tooling required One Page is also optimal on tablets. The One Page `Html` file can be downloaded from the `examples` directory in this repository.
+
+- One Page uses [htm](https://github.com/developit/htm) over JSX to reduce the dependencies and load time.
+
+# Applying a theme your deck with Spectacle
+
+Create a theme JS file. It's a single object export where supplied properties are merged with the default base theme at `src/theme/default-theme.js`.
+
+```js
+export default {
+  colors: {
+    primary: 'red',
+    secondary: 'green'
+  },
+  fonts: {
+    header: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+  },
+  fontSizes: {
+    h1: '72px',
+    h2: '64px'
+  }
+};
+```
+
+To use a custom theme with a JSX or HTM-deck, supply the object to the `theme` prop in the `Deck` tag. `<Deck theme={customTheme}>`.
+
+To use a custom theme with the Markdown CLI, supply the file using the `-t` parameter.
+
+`npx spectacle -s my-slides.mdx -t custom-theme.js`
